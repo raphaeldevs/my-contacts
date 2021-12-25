@@ -16,9 +16,9 @@ export const defaultTheme = {
     },
 
     gray: {
-      900: '#222222',
-      200: '#BCBCBC',
-      100: '#E5E5E5'
+      dark: '#222222',
+      light: '#BCBCBC',
+      lighter: '#E5E5E5'
     }
   }
 }

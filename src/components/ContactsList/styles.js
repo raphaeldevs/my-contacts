@@ -10,7 +10,6 @@ export const Header = styled.header`
   align-items: center;
 
   strong {
-    color: #222;
     font-size: 1.5rem;
   }
 
@@ -31,6 +30,86 @@ export const Header = styled.header`
     &:hover {
       background-color: ${({ theme }) => theme.colors.primary.main};
       color: #fff;
+    }
+  }
+`
+
+export const ListContainer = styled.div`
+  margin-top: 1.5rem;
+
+  header {
+    margin-bottom: 0.5rem;
+
+    button {
+      display: flex;
+      align-items: center;
+
+      border: none;
+
+      background: none;
+
+      span {
+        margin-right: 0.5rem;
+
+        color: ${({ theme }) => theme.colors.primary.main};
+
+        font-weight: bold;
+      }
+    }
+  }
+`
+
+export const Card = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  margin-bottom: 1rem;
+  padding: 1rem;
+
+  background: #fff;
+
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+
+  border-radius: 0.25rem;
+
+  .info {
+    .contact-name {
+      display: flex;
+      align-items: center;
+
+      small {
+        margin-left: 0.5rem;
+        padding: 0.25rem 0.5rem;
+
+        background-color: ${({ theme }) => theme.colors.primary.lighter};
+
+        border-radius: 0.25rem;
+
+        font-weight: bold;
+
+        color: ${({ theme }) => theme.colors.primary.main};
+
+        text-transform: uppercase;
+      }
+    }
+
+    span {
+      display: block;
+
+      color: ${({ theme }) => theme.colors.gray.light};
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: center;
+
+    button {
+      margin-left: 0.5rem;
+      background: none;
+
+      border: none;
     }
   }
 `

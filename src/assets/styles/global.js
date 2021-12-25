@@ -13,7 +13,10 @@ export const GlobalStyles = styled.createGlobalStyle`
 
   body {
     background-color: ${({ theme }) => theme.colors.background};
+
     font-size: 16px;
+
+    color: ${props => props.theme.colors.gray.dark};
   }
 
   button {
