@@ -1,13 +1,37 @@
 import styled from 'styled-components'
 
-export const Container = styled.div`
-  margin-top: 2rem;
+export const Container = styled.div``
+
+export const InputSearchContainer = styled.div`
+  width: 100%;
+
+  input {
+    width: 100%;
+    height: 50px;
+
+    padding: 0 1rem;
+
+    border: none;
+    border-radius: 1.5rem;
+
+    outline: 0;
+
+    background-color: white;
+
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.04);
+
+    &::placeholder {
+      color: #bcbcbc;
+    }
+  }
 `
 
 export const Header = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  margin-top: 2rem;
 
   strong {
     font-size: 1.5rem;
