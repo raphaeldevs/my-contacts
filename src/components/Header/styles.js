@@ -21,7 +21,7 @@ export const InputSearchContainer = styled.div`
     padding: 0 1rem;
 
     border: none;
-    border-radius: 25px;
+    border-radius: 1.5rem;
 
     outline: 0;
 
@@ -32,9 +32,5 @@ export const InputSearchContainer = styled.div`
     &::placeholder {
       color: #bcbcbc;
     }
-  }
-
-  @media (max-width: 550px) {
-    padding: 0 1rem;
   }
 `

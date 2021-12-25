@@ -12,7 +12,7 @@ export const GlobalStyles = styled.createGlobalStyle`
   }
 
   body {
-    background-color: ${({ theme }) => theme.backgroundColor};
+    background-color: ${({ theme }) => theme.colors.background};
     font-size: 16px;
   }
 
