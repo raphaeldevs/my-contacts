@@ -13,8 +13,8 @@ function ContactForm({ buttonLabel }) {
         <Input name="name" placeholder="Nome" />
       </FormGroup>
 
-      <FormGroup>
-        <Input name="email" placeholder="E-mail" />
+      <FormGroup error="O formato do e-mail é inválido">
+        <Input name="email" placeholder="E-mail" error />
       </FormGroup>
 
       <FormGroup>
