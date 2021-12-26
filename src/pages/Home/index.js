@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom'
+
 import {
   Card,
   Container,
@@ -12,7 +14,7 @@ import trash from '../../assets/images/icons/trash.svg'
 
 function Home() {
   return (
-    <Container id="oi">
+    <Container>
       <InputSearchContainer>
         <form>
           <input type="text" placeholder="Pesquise pelo nome" />
@@ -21,18 +23,18 @@ function Home() {
 
       <Header>
         <strong>3 contatos</strong>
-        <a href="/">Novo contato</a>
+        <Link to="/new">Novo contato</Link>
       </Header>
 
       <ListContainer>
         <header>
-          <button type="button" className="sort-button">
+          <button
+            type="button"
+            className="sort-button"
+            title="Ordenar lista em ordem crescente"
+          >
             <span>Nome</span>
-            <img
-              src={arrow}
-              alt="Seta apontando para cima"
-              title="Ordenar lista em ordem crescente"
-            />
+            <img src={arrow} alt="Seta apontando para cima" />
           </button>
         </header>
 
@@ -47,51 +49,9 @@ function Home() {
           </div>
 
           <div className="actions">
-            <a href="/">
+            <Link to="/edit/123">
               <img src={edit} alt="Editar" title="Editar contato" />
-            </a>
-
-            <button type="button">
-              <img src={trash} alt="Excluir" title="Excluir contato" />
-            </button>
-          </div>
-        </Card>
-
-        <Card>
-          <div className="info">
-            <div className="contact-name">
-              <strong>Raphael Corrêa</strong>
-              <small>Work</small>
-            </div>
-            <span>oi@raphaeldevs.com.br</span>
-            <span>(98) 99999-9999</span>
-          </div>
-
-          <div className="actions">
-            <a href="/">
-              <img src={edit} alt="Editar" title="Editar contato" />
-            </a>
-
-            <button type="button">
-              <img src={trash} alt="Excluir" title="Excluir contato" />
-            </button>
-          </div>
-        </Card>
-
-        <Card>
-          <div className="info">
-            <div className="contact-name">
-              <strong>Raphael Corrêa</strong>
-              <small>Work</small>
-            </div>
-            <span>oi@raphaeldevs.com.br</span>
-            <span>(98) 99999-9999</span>
-          </div>
-
-          <div className="actions">
-            <a href="/">
-              <img src={edit} alt="Editar" title="Editar contato" />
-            </a>
+            </Link>
 
             <button type="button">
               <img src={trash} alt="Excluir" title="Excluir contato" />
