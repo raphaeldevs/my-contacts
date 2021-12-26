@@ -4,7 +4,7 @@ import PageHeader from '../../components/PageHeader'
 function EditContact() {
   return (
     <>
-      <PageHeader title="Novo contato" />
+      <PageHeader title="Editar contato" />
       <ContactForm buttonLabel="Salvar alterações" />
     </>
   )

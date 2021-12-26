@@ -1,8 +1,9 @@
 import styled from 'styled-components'
 
 export default styled.button`
-  width: 100%;
   height: 52px;
+
+  padding: 0 1rem;
 
   border: none;
   border-radius: 0.25rem;
