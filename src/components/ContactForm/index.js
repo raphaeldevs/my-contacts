@@ -10,6 +10,7 @@ import FormGroup from '../FormGroup'
 import Input from '../Input'
 
 import { ButtonContainer } from './styles'
+import formatPhone from '../../utils/formatPhone'
 
 function ContactForm({ buttonLabel }) {
   const [name, setName] = useState('')
@@ -46,15 +47,19 @@ function ContactForm({ buttonLabel }) {
     }
   }
 
+  function handlePhoneChange(event) {
+    setPhone(formatPhone(event.target.value))
+  }
+
   function handleSubmit(event) {
     event.preventDefault()
 
     // eslint-disable-next-line no-console
-    console.log({ name, email, phone, category })
+    console.log({ name, email, phone: phone.replace(/\D/g, ''), category })
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} noValidate>
       <FormGroup error={getErrorMessageByField('name')}>
         <Input
           name="name"
@@ -67,6 +72,7 @@ function ContactForm({ buttonLabel }) {
 
       <FormGroup error={getErrorMessageByField('email')}>
         <Input
+          type="email"
           name="email"
           placeholder="E-mail"
           onChange={handleEmailChange}
@@ -77,10 +83,12 @@ function ContactForm({ buttonLabel }) {
 
       <FormGroup>
         <Input
+          type="tel"
           name="phone"
           placeholder="Telefone"
-          onChange={event => setPhone(event.target.value)}
+          onChange={handlePhoneChange}
           value={phone}
+          maxLength="16"
         />
       </FormGroup>
 
