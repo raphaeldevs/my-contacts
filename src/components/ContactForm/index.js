@@ -21,8 +21,10 @@ function ContactForm({ buttonLabel }) {
   const { errors, setError, removeError, getErrorMessageByField } =
     useFormErrors()
 
+  const isFormValid = name && !errors.length
+
   function handleNameChange(event) {
-    setName(event.target.value)
+    setName(event.target.value.trim())
 
     if (!event.target.value.trim()) {
       setError({
@@ -35,7 +37,7 @@ function ContactForm({ buttonLabel }) {
   }
 
   function handleEmailChange(event) {
-    setEmail(event.target.value)
+    setEmail(event.target.value.trim())
 
     if (event.target.value.trim() && !isEmailValid(event.target.value)) {
       setError({
@@ -63,7 +65,7 @@ function ContactForm({ buttonLabel }) {
       <FormGroup error={getErrorMessageByField('name')}>
         <Input
           name="name"
-          placeholder="Nome"
+          placeholder="Nome *"
           onChange={handleNameChange}
           value={name}
           error={getErrorMessageByField('name')}
@@ -96,7 +98,7 @@ function ContactForm({ buttonLabel }) {
         <Input
           as="select"
           name="category"
-          onChange={event => setCategory(event.target.value)}
+          onChange={event => setCategory(event.target.value.trim())}
           value={category}
         >
           <option value="">Selecione uma categoria</option>
@@ -105,7 +107,7 @@ function ContactForm({ buttonLabel }) {
       </FormGroup>
 
       <ButtonContainer>
-        <Button type="submit" disabled={Boolean(errors.length)}>
+        <Button type="submit" disabled={!isFormValid}>
           {buttonLabel}
         </Button>
       </ButtonContainer>
