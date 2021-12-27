@@ -17,7 +17,7 @@ function Home() {
     <Container>
       <InputSearchContainer>
         <form>
-          <input type="text" placeholder="Pesquise pelo nome" />
+          <input type="search" placeholder="Pesquise pelo nome" />
         </form>
       </InputSearchContainer>
 
