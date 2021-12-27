@@ -21,6 +21,8 @@ function ContactForm({ buttonLabel }) {
   const { errors, setError, removeError, getErrorMessageByField } =
     useFormErrors()
 
+  const isFormValid = name && !errors.length
+
   function handleNameChange(event) {
     setName(event.target.value)
 
@@ -63,7 +65,7 @@ function ContactForm({ buttonLabel }) {
       <FormGroup error={getErrorMessageByField('name')}>
         <Input
           name="name"
-          placeholder="Nome"
+          placeholder="Nome *"
           onChange={handleNameChange}
           value={name}
           error={getErrorMessageByField('name')}
@@ -105,7 +107,7 @@ function ContactForm({ buttonLabel }) {
       </FormGroup>
 
       <ButtonContainer>
-        <Button type="submit" disabled={Boolean(errors.length)}>
+        <Button type="submit" disabled={!isFormValid}>
           {buttonLabel}
         </Button>
       </ButtonContainer>
