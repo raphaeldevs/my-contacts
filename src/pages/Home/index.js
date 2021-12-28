@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { Link } from 'react-router-dom'
+
+import usePluralize from '../../hooks/usePluralize'
 
 import formatPhone from '../../utils/formatPhone'
 
@@ -19,6 +21,19 @@ import trash from '../../assets/images/icons/trash.svg'
 function Home() {
   const [contacts, setContacts] = useState([])
   const [orderBy, setOrderBy] = useState('asc')
+  const [searchTerm, setSearchTerm] = useState('')
+
+  const filteredContacts = useMemo(
+    () =>
+      contacts.filter(contact =>
+        contact.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ),
+    [searchTerm, contacts]
+  )
+
+  function handleChangeSearchTerm(event) {
+    setSearchTerm(event.target.value.trim())
+  }
 
   function handleToggleOrderBy() {
     setOrderBy(order => (order === 'asc' ? 'desc' : 'asc'))
@@ -46,42 +61,53 @@ function Home() {
     <Container>
       <InputSearchContainer>
         <form>
-          <input type="search" placeholder="Pesquise pelo nome" />
+          <input
+            type="search"
+            placeholder="Pesquise pelo nome"
+            onChange={handleChangeSearchTerm}
+          />
         </form>
       </InputSearchContainer>
 
       <Header>
         <strong>
-          {contacts.length} {contacts.length > 1 ? 'contatos' : 'contato'}
+          {usePluralize({
+            count: filteredContacts.length,
+            singularText: '1 contato',
+            pluralText: 'contatos',
+            noDataText: 'Sem contatos'
+          })}
         </strong>
         <Link to="/new" title="Criar novo contato">
           Novo contato
         </Link>
       </Header>
 
-      <ListHeader orderBy={orderBy}>
-        <header>
-          <button
-            type="button"
-            className="sort-button"
-            title={`Ordenar lista em ordem ${
-              orderBy === 'desc' ? 'crescente' : 'decrescente'
-            }`}
-            onClick={handleToggleOrderBy}
-          >
-            <span>Nome</span>
-            <img
-              src={arrow}
-              alt={`Seta apontando para ${
-                orderBy === 'asc' ? 'cima' : 'baixo'
+      {Boolean(filteredContacts.length) && (
+        <ListHeader orderBy={orderBy}>
+          <header>
+            <button
+              type="button"
+              className="sort-button"
+              title={`Ordenar lista em ordem ${
+                orderBy === 'desc' ? 'crescente' : 'decrescente'
               }`}
-            />
-          </button>
-        </header>
-      </ListHeader>
+              onClick={handleToggleOrderBy}
+            >
+              <span>Nome</span>
+              <img
+                src={arrow}
+                alt={`Seta apontando para ${
+                  orderBy === 'asc' ? 'cima' : 'baixo'
+                }`}
+              />
+            </button>
+          </header>
+        </ListHeader>
+      )}
 
-      {contacts.length ? (
-        contacts.map(contact => (
+      {Boolean(filteredContacts.length) &&
+        filteredContacts.map(contact => (
           <Card key={contact.id}>
             <div className="info">
               <div className="contact-name">
@@ -104,10 +130,7 @@ function Home() {
               </button>
             </div>
           </Card>
-        ))
-      ) : (
-        <h4>Sem contatos</h4>
-      )}
+        ))}
     </Container>
   )
 }
