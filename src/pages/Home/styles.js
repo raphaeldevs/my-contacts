@@ -58,27 +58,32 @@ export const Header = styled.header`
   }
 `
 
-export const ListContainer = styled.div`
+export const ListHeader = styled.header`
   margin-top: 1.5rem;
 
-  header {
-    margin-bottom: 0.5rem;
+  margin-bottom: 0.5rem;
 
-    button {
-      display: flex;
-      align-items: center;
+  button {
+    display: flex;
+    align-items: center;
 
-      border: none;
+    border: none;
 
-      background: none;
+    background: none;
 
-      span {
-        margin-right: 0.5rem;
+    span {
+      margin-right: 0.5rem;
 
-        color: ${({ theme }) => theme.colors.primary.main};
+      color: ${({ theme }) => theme.colors.primary.main};
 
-        font-weight: bold;
-      }
+      font-weight: bold;
+    }
+
+    img {
+      transition: transform 0.2s ease-in;
+
+      transform: ${({ orderBy }) =>
+        orderBy === 'asc' ? 'rotate(180deg)' : 'inherit'};
     }
   }
 `
