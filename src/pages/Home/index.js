@@ -19,10 +19,7 @@ import {
 import arrow from '../../assets/images/icons/arrow.svg'
 import edit from '../../assets/images/icons/edit.svg'
 import trash from '../../assets/images/icons/trash.svg'
-
-function delay(ms) {
-  return new Promise(resolve => setTimeout(() => resolve(), ms))
-}
+import ContactService from '../../services/ContactService'
 
 function Home() {
   const [contacts, setContacts] = useState([])
@@ -51,14 +48,9 @@ function Home() {
       try {
         setIsLoading(true)
 
-        const response = await fetch(
-          `http://localhost:3100/contacts?orderBy=${orderBy}`
-        )
-        const data = await response.json()
+        const contacts = await ContactService.listContacts(orderBy)
 
-        await delay(5000)
-
-        setContacts(data)
+        setContacts(contacts)
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error('Erro ao buscar contatos', error)
