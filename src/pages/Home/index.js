@@ -6,6 +6,8 @@ import usePluralize from '../../hooks/usePluralize'
 
 import formatPhone from '../../utils/formatPhone'
 
+import Loader from '../../components/Loader'
+
 import {
   Card,
   Container,
@@ -18,17 +20,22 @@ import arrow from '../../assets/images/icons/arrow.svg'
 import edit from '../../assets/images/icons/edit.svg'
 import trash from '../../assets/images/icons/trash.svg'
 
+function delay(ms) {
+  return new Promise(resolve => setTimeout(() => resolve(), ms))
+}
+
 function Home() {
   const [contacts, setContacts] = useState([])
   const [orderBy, setOrderBy] = useState('asc')
   const [searchTerm, setSearchTerm] = useState('')
+  const [isLoading, setIsLoading] = useState(true)
 
   const filteredContacts = useMemo(
     () =>
       contacts.filter(contact =>
         contact.name.toLowerCase().includes(searchTerm.toLowerCase())
       ),
-    [searchTerm, contacts]
+    [contacts, searchTerm]
   )
 
   function handleChangeSearchTerm(event) {
@@ -39,26 +46,34 @@ function Home() {
     setOrderBy(order => (order === 'asc' ? 'desc' : 'asc'))
   }
 
-  useEffect(
-    () =>
-      (async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:3100/contacts?orderBy=${orderBy}`
-          )
-          const data = await response.json()
+  useEffect(() => {
+    async function loadContacts() {
+      try {
+        setIsLoading(true)
 
-          setContacts(data)
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.error('Erro ao buscar contatos', error)
-        }
-      })(),
-    [orderBy]
-  )
+        const response = await fetch(
+          `http://localhost:3100/contacts?orderBy=${orderBy}`
+        )
+        const data = await response.json()
+
+        await delay(5000)
+
+        setContacts(data)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error('Erro ao buscar contatos', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    loadContacts()
+  }, [orderBy])
 
   return (
     <Container>
+      <Loader isLoading={isLoading} />
+
       <InputSearchContainer>
         <form>
           <input
