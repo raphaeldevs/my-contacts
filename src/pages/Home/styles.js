@@ -184,3 +184,20 @@ export const EmptyListContainer = styled.div`
     }
   }
 `
+
+export const SearchNotFoundContainer = styled.div`
+  display: flex;
+  align-items: flex-start;
+
+  margin-top: 1rem;
+
+  img {
+    margin-right: 1.5rem;
+  }
+
+  span {
+    color: ${({ theme }) => theme.colors.gray.light};
+
+    word-break: break-word;
+  }
+`
