@@ -126,9 +126,9 @@ function Home() {
               <img src={emptyBox} alt="Caixa vazia" />
 
               <p>
-                Você ainda não tem nenhum contato cadastrado!
-                Clique no botão <strong>”Novo contato”</strong> à cima para
-                cadastrar o seu primeiro!
+                Você ainda não tem nenhum contato cadastrado! Clique no botão{' '}
+                <strong>”Novo contato”</strong> à cima para cadastrar o seu
+                primeiro!
               </p>
             </EmptyListContainer>
           )}
@@ -137,7 +137,8 @@ function Home() {
             <SearchNotFoundContainer>
               <img src={magnifierQuestion} alt="Lupa" />
               <span>
-                Nenhum resultado foi encontrado para <strong>”{searchTerm}”</strong>.
+                Nenhum resultado foi encontrado para{' '}
+                <strong>”{searchTerm}”</strong>.
               </span>
             </SearchNotFoundContainer>
           )}
