@@ -18,14 +18,16 @@ import {
   ErrorContainer,
   Header,
   InputSearchContainer,
-  ListHeader
+  ListHeader,
+  SearchNotFoundContainer
 } from './styles'
 
 import arrow from '../../assets/images/icons/arrow.svg'
 import edit from '../../assets/images/icons/edit.svg'
 import trash from '../../assets/images/icons/trash.svg'
-import sad from '../../assets/images/icons/sad.svg'
+import sad from '../../assets/images/sad.svg'
 import emptyBox from '../../assets/images/empty-box.svg'
+import magnifierQuestion from '../../assets/images/magnifier-question.svg'
 
 function Home() {
   const [contacts, setContacts] = useState([])
@@ -124,11 +126,20 @@ function Home() {
               <img src={emptyBox} alt="Caixa vazia" />
 
               <p>
-                Você ainda não tem nenhum contato cadastrado! Clique no botão{' '}
-                <strong>”Novo contato”</strong> à cima para cadastrar o seu
-                primeiro!
+                Você ainda não tem nenhum contato cadastrado!
+                Clique no botão <strong>”Novo contato”</strong> à cima para
+                cadastrar o seu primeiro!
               </p>
             </EmptyListContainer>
+          )}
+
+          {Boolean(contacts.length && !filteredContacts.length) && (
+            <SearchNotFoundContainer>
+              <img src={magnifierQuestion} alt="Lupa" />
+              <span>
+                Nenhum resultado foi encontrado para <strong>”{searchTerm}”</strong>.
+              </span>
+            </SearchNotFoundContainer>
           )}
 
           {Boolean(filteredContacts.length) && (
