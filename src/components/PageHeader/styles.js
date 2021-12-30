@@ -16,7 +16,7 @@ export const Container = styled.header`
     span {
       font-weight: bold;
 
-      color: ${props => props.theme.colors.primary};
+      color: ${props => props.theme.colors.primary.main};
     }
 
     img {
