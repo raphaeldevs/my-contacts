@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Link } from 'react-router-dom'
@@ -5,8 +6,7 @@ import { Link } from 'react-router-dom'
 import ContactService from '../../services/ContactService'
 
 import formatPhone from '../../utils/formatPhone'
-
-import Pluralize from '../../hooks/usePluralize'
+import Pluralize from '../../utils/pluralize'
 
 import Button from '../../components/Button'
 import Loader from '../../components/Loader'
@@ -14,6 +14,7 @@ import Loader from '../../components/Loader'
 import {
   Card,
   Container,
+  EmptyListContainer,
   ErrorContainer,
   Header,
   InputSearchContainer,
@@ -24,6 +25,7 @@ import arrow from '../../assets/images/icons/arrow.svg'
 import edit from '../../assets/images/icons/edit.svg'
 import trash from '../../assets/images/icons/trash.svg'
 import sad from '../../assets/images/icons/sad.svg'
+import emptyBox from '../../assets/images/empty-box.svg'
 
 function Home() {
   const [contacts, setContacts] = useState([])
@@ -74,15 +76,23 @@ function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
-      <InputSearchContainer>
-        <input
-          type="search"
-          placeholder="Pesquise pelo nome"
-          onChange={handleChangeSearchTerm}
-        />
-      </InputSearchContainer>
-      <Header hasError={hasError}>
-        {!hasError && (
+
+      {Boolean(!hasError && contacts.length) && (
+        <InputSearchContainer>
+          <input
+            type="search"
+            placeholder="Pesquise pelo nome"
+            onChange={handleChangeSearchTerm}
+          />
+        </InputSearchContainer>
+      )}
+
+      <Header
+        justifyContent={
+          hasError ? 'flex-end' : !contacts.length ? 'center' : 'space-between'
+        }
+      >
+        {Boolean(!hasError && contacts.length) && (
           <strong>
             {Pluralize({
               count: filteredContacts.length,
@@ -92,7 +102,6 @@ function Home() {
             })}
           </strong>
         )}
-
         <Link to="/new" title="Criar novo contato">
           Novo contato
         </Link>
@@ -108,53 +117,69 @@ function Home() {
         </ErrorContainer>
       )}
 
-      {Boolean(filteredContacts.length) && !hasError && (
+      {!hasError && (
         <>
-          <ListHeader orderBy={orderBy}>
-            <header>
-              <button
-                type="button"
-                className="sort-button"
-                title={`Ordenar lista em ordem ${
-                  orderBy === 'desc' ? 'crescente' : 'decrescente'
-                }`}
-                onClick={handleToggleOrderBy}
-              >
-                <span>Nome</span>
-                <img
-                  src={arrow}
-                  alt={`Seta apontando para ${
-                    orderBy === 'asc' ? 'cima' : 'baixo'
-                  }`}
-                />
-              </button>
-            </header>
-          </ListHeader>
+          {!contacts.length && !isLoading && (
+            <EmptyListContainer>
+              <img src={emptyBox} alt="Caixa vazia" />
 
-          {filteredContacts.map(contact => (
-            <Card key={contact.id}>
-              <div className="info">
-                <div className="contact-name">
-                  <strong>{contact.name}</strong>
-                  {contact.category_name && (
-                    <small>{contact.category_name}</small>
-                  )}
-                </div>
-                <span>{contact.email}</span>
-                {contact.phone && <span>{formatPhone(contact.phone)}</span>}
-              </div>
+              <p>
+                Você ainda não tem nenhum contato cadastrado! Clique no botão{' '}
+                <strong>”Novo contato”</strong> à cima para cadastrar o seu
+                primeiro!
+              </p>
+            </EmptyListContainer>
+          )}
 
-              <div className="actions">
-                <Link to={`/edit/${contact.id}`}>
-                  <img src={edit} alt="Editar" title="Editar contato" />
-                </Link>
+          {Boolean(filteredContacts.length) && (
+            <>
+              <ListHeader orderBy={orderBy}>
+                <header>
+                  <button
+                    type="button"
+                    className="sort-button"
+                    title={`Ordenar lista em ordem ${
+                      orderBy === 'desc' ? 'crescente' : 'decrescente'
+                    }`}
+                    onClick={handleToggleOrderBy}
+                  >
+                    <span>Nome</span>
+                    <img
+                      src={arrow}
+                      alt={`Seta apontando para ${
+                        orderBy === 'asc' ? 'cima' : 'baixo'
+                      }`}
+                    />
+                  </button>
+                </header>
+              </ListHeader>
 
-                <button type="button">
-                  <img src={trash} alt="Excluir" title="Excluir contato" />
-                </button>
-              </div>
-            </Card>
-          ))}
+              {filteredContacts.map(contact => (
+                <Card key={contact.id}>
+                  <div className="info">
+                    <div className="contact-name">
+                      <strong>{contact.name}</strong>
+                      {contact.category_name && (
+                        <small>{contact.category_name}</small>
+                      )}
+                    </div>
+                    <span>{contact.email}</span>
+                    {contact.phone && <span>{formatPhone(contact.phone)}</span>}
+                  </div>
+
+                  <div className="actions">
+                    <Link to={`/edit/${contact.id}`}>
+                      <img src={edit} alt="Editar" title="Editar contato" />
+                    </Link>
+
+                    <button type="button">
+                      <img src={trash} alt="Excluir" title="Excluir contato" />
+                    </button>
+                  </div>
+                </Card>
+              ))}
+            </>
+          )}
         </>
       )}
     </Container>
