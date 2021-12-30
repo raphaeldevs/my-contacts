@@ -144,7 +144,7 @@ function Home() {
           )}
 
           {Boolean(filteredContacts.length) && (
-            <>
+            <main>
               <ListHeader orderBy={orderBy}>
                 <header>
                   <button
@@ -166,31 +166,39 @@ function Home() {
                 </header>
               </ListHeader>
 
-              {filteredContacts.map(contact => (
-                <Card key={contact.id}>
-                  <div className="info">
-                    <div className="contact-name">
-                      <strong>{contact.name}</strong>
-                      {contact.category_name && (
-                        <small>{contact.category_name}</small>
+              <ul>
+                {filteredContacts.map(contact => (
+                  <Card key={contact.id}>
+                    <div className="info">
+                      <div className="contact-name">
+                        <strong>{contact.name}</strong>
+                        {contact.category_name && (
+                          <small>{contact.category_name}</small>
+                        )}
+                      </div>
+                      <span>{contact.email}</span>
+                      {contact.phone && (
+                        <span>{formatPhone(contact.phone)}</span>
                       )}
                     </div>
-                    <span>{contact.email}</span>
-                    {contact.phone && <span>{formatPhone(contact.phone)}</span>}
-                  </div>
 
-                  <div className="actions">
-                    <Link to={`/edit/${contact.id}`}>
-                      <img src={edit} alt="Editar" title="Editar contato" />
-                    </Link>
+                    <div className="actions">
+                      <Link to={`/edit/${contact.id}`}>
+                        <img src={edit} alt="Editar" title="Editar contato" />
+                      </Link>
 
-                    <button type="button">
-                      <img src={trash} alt="Excluir" title="Excluir contato" />
-                    </button>
-                  </div>
-                </Card>
-              ))}
-            </>
+                      <button type="button">
+                        <img
+                          src={trash}
+                          alt="Excluir"
+                          title="Excluir contato"
+                        />
+                      </button>
+                    </div>
+                  </Card>
+                ))}
+              </ul>
+            </main>
           )}
         </>
       )}

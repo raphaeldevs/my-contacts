@@ -25,6 +25,32 @@ class HttpClient {
       body?.error || `${response.status} - ${response.statusText}`
     )
   }
+
+  async post(path, body) {
+    await delay(3000)
+
+    const response = await fetch(`${this.baseURL}${path}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(body)
+    })
+
+    const contentType = response.headers.get('content-type')
+
+    const responseBody = contentType.includes('application/json')
+      ? await response.json()
+      : null
+
+    if (response.ok) {
+      return responseBody
+    }
+
+    throw new APIError(
+      responseBody?.error || `${response.status} - ${response.statusText}`
+    )
+  }
 }
 
 export default HttpClient

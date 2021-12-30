@@ -9,10 +9,6 @@ export const Container = styled.header`
 
     text-decoration: none;
 
-    &:hover {
-      text-decoration: underline;
-    }
-
     span {
       font-weight: bold;
 

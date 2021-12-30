@@ -91,7 +91,7 @@ export const ListHeader = styled.header`
   }
 `
 
-export const Card = styled.div`
+export const Card = styled.li`
   display: flex;
   justify-content: space-between;
   align-items: center;

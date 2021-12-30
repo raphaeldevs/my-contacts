@@ -1,16 +1,22 @@
 import PropTypes from 'prop-types'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-import isEmailValid from '../../utils/isEmailValid'
+import { useHistory } from 'react-router-dom'
+
+import CategoryService from '../../services/CategoryService'
+import ContactService from '../../services/ContactService'
+
 import useFormErrors from '../../hooks/useFormErrors'
+import isEmailValid from '../../utils/isEmailValid'
+import formatPhone from '../../utils/formatPhone'
 
 import FormGroup from '../FormGroup'
 import Input from '../Input'
 import Button from '../Button'
+import Loader from '../Loader'
 
 import { ButtonContainer } from './styles'
-import formatPhone from '../../utils/formatPhone'
 
 function ContactForm({ buttonLabel }) {
   const [name, setName] = useState('')
@@ -18,13 +24,18 @@ function ContactForm({ buttonLabel }) {
   const [phone, setPhone] = useState('')
   const [category, setCategory] = useState('')
 
+  const [categories, setCategories] = useState([])
+  const [isLoading, setIsLoading] = useState(true)
+
   const { errors, setError, removeError, getErrorMessageByField } =
     useFormErrors()
+
+  const history = useHistory()
 
   const isFormValid = name && !errors.length
 
   function handleNameChange(event) {
-    setName(event.target.value.trim())
+    setName(event.target.value)
 
     if (!event.target.value.trim()) {
       setError({
@@ -53,65 +64,108 @@ function ContactForm({ buttonLabel }) {
     setPhone(formatPhone(event.target.value))
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
 
-    // eslint-disable-next-line no-console
-    console.log({ name, email, phone: phone.replace(/\D/g, ''), category })
+    try {
+      setIsLoading(true)
+
+      await ContactService.createContact({
+        name,
+        email,
+        phone: phone.replace(/\D/g, ''),
+        category
+      })
+
+      history.push('/')
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    } finally {
+      setIsLoading(false)
+    }
   }
 
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        setIsLoading(true)
+
+        const categories = await CategoryService.listCategories()
+
+        setCategories(categories)
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchCategories()
+  }, [])
+
   return (
-    <form onSubmit={handleSubmit} noValidate>
-      <FormGroup error={getErrorMessageByField('name')}>
-        <Input
-          name="name"
-          placeholder="Nome *"
-          onChange={handleNameChange}
-          value={name}
-          error={getErrorMessageByField('name')}
-        />
-      </FormGroup>
+    <>
+      <Loader isLoading={isLoading} />
 
-      <FormGroup error={getErrorMessageByField('email')}>
-        <Input
-          type="email"
-          name="email"
-          placeholder="E-mail"
-          onChange={handleEmailChange}
-          value={email}
-          error={getErrorMessageByField('email')}
-        />
-      </FormGroup>
+      <form onSubmit={handleSubmit} noValidate>
+        <FormGroup error={getErrorMessageByField('name')}>
+          <Input
+            name="name"
+            placeholder="Nome *"
+            onChange={handleNameChange}
+            value={name}
+            error={getErrorMessageByField('name')}
+          />
+        </FormGroup>
 
-      <FormGroup>
-        <Input
-          type="tel"
-          name="phone"
-          placeholder="Telefone"
-          onChange={handlePhoneChange}
-          value={phone}
-          maxLength="16"
-        />
-      </FormGroup>
+        <FormGroup error={getErrorMessageByField('email')}>
+          <Input
+            type="email"
+            name="email"
+            placeholder="E-mail"
+            onChange={handleEmailChange}
+            value={email}
+            error={getErrorMessageByField('email')}
+          />
+        </FormGroup>
 
-      <FormGroup>
-        <Input
-          as="select"
-          name="category"
-          onChange={event => setCategory(event.target.value.trim())}
-          value={category}
-        >
-          <option value="">Selecione uma categoria</option>
-          <option value="work">Work</option>
-        </Input>
-      </FormGroup>
+        <FormGroup>
+          <Input
+            type="tel"
+            name="phone"
+            placeholder="Telefone"
+            onChange={handlePhoneChange}
+            value={phone}
+            maxLength="16"
+          />
+        </FormGroup>
 
-      <ButtonContainer>
-        <Button type="submit" disabled={!isFormValid}>
-          {buttonLabel}
-        </Button>
-      </ButtonContainer>
-    </form>
+        <FormGroup>
+          <Input
+            as="select"
+            name="category"
+            onChange={event => setCategory(event.target.value.trim())}
+            value={category}
+          >
+            <option value="">Selecione uma categoria</option>
+            {Boolean(categories.length) &&
+              categories.map(category => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+          </Input>
+        </FormGroup>
+
+        <ButtonContainer>
+          <Button type="submit" disabled={!isFormValid} onClick={handleSubmit}>
+            {buttonLabel}
+          </Button>
+        </ButtonContainer>
+      </form>
+    </>
   )
 }
 
