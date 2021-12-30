@@ -10,6 +10,7 @@ import Pluralize from '../../utils/pluralize'
 
 import Button from '../../components/Button'
 import Loader from '../../components/Loader'
+import Modal from '../../components/Modal'
 
 import {
   Card,
@@ -35,6 +36,8 @@ function Home() {
   const [searchTerm, setSearchTerm] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const [hasError, setHasError] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalData, setModalData] = useState({})
 
   const filteredContacts = useMemo(
     () =>
@@ -50,6 +53,32 @@ function Home() {
 
   function handleToggleOrderBy() {
     setOrderBy(order => (order === 'asc' ? 'desc' : 'asc'))
+  }
+
+  async function handleDeleteContact({ id, name }) {
+    setIsModalOpen(true)
+    setModalData({
+      id,
+      name
+    })
+  }
+
+  async function deleteContact(id) {
+    try {
+      setIsLoading(true)
+
+      await ContactService.deleteContact(id)
+
+      setContacts(contacts => contacts.filter(contact => contact.id !== id))
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+      setHasError(true)
+    } finally {
+      setIsLoading(false)
+      setIsModalOpen(false)
+      setModalData({})
+    }
   }
 
   const loadContacts = useCallback(async () => {
@@ -78,6 +107,18 @@ function Home() {
   return (
     <Container>
       <Loader isLoading={isLoading} />
+
+      <Modal
+        title={`Tem certeza que deseja remover o contato ”${modalData.name}”?`}
+        message="Esta ação não poderá ser desfeita!"
+        confirmLabel="Deletar"
+        onConfirm={() => deleteContact(modalData?.id)}
+        onCancel={() => {
+          setIsModalOpen(false)
+          setModalData({})
+        }}
+        isOpen={isModalOpen}
+      />
 
       {Boolean(!hasError && contacts.length) && (
         <InputSearchContainer>
@@ -187,7 +228,15 @@ function Home() {
                         <img src={edit} alt="Editar" title="Editar contato" />
                       </Link>
 
-                      <button type="button">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleDeleteContact({
+                            id: contact.id,
+                            name: contact.name
+                          })
+                        }
+                      >
                         <img
                           src={trash}
                           alt="Excluir"

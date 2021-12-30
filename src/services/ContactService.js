@@ -12,6 +12,14 @@ class ContactService {
   async createContact(contact) {
     return this.httpClient.post('/contacts', contact)
   }
+
+  async getContact(id) {
+    return this.httpClient.get(`/contacts/${id}`)
+  }
+
+  async deleteContact(id) {
+    return this.httpClient.delete(`/contacts/${id}`)
+  }
 }
 
 export default new ContactService()

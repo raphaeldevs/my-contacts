@@ -18,11 +18,11 @@ import Loader from '../Loader'
 
 import { ButtonContainer } from './styles'
 
-function ContactForm({ buttonLabel }) {
-  const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [phone, setPhone] = useState('')
-  const [category, setCategory] = useState('')
+function ContactForm({ buttonLabel, startValues }) {
+  const [name, setName] = useState(startValues.name)
+  const [email, setEmail] = useState(startValues.email)
+  const [phone, setPhone] = useState(startValues.phone)
+  const [category, setCategory] = useState(startValues.category_id)
 
   const [categories, setCategories] = useState([])
   const [isLoading, setIsLoading] = useState(true)
@@ -74,7 +74,7 @@ function ContactForm({ buttonLabel }) {
         name,
         email,
         phone: phone.replace(/\D/g, ''),
-        category
+        category_id: category
       })
 
       history.push('/')
@@ -104,6 +104,15 @@ function ContactForm({ buttonLabel }) {
 
     fetchCategories()
   }, [])
+
+  useEffect(() => {
+    if (Object.keys(startValues).length) {
+      setName(startValues.name)
+      setEmail(startValues.email)
+      setPhone(startValues.phone)
+      setCategory(startValues.category_id)
+    }
+  }, [startValues])
 
   return (
     <>
@@ -170,7 +179,22 @@ function ContactForm({ buttonLabel }) {
 }
 
 ContactForm.propTypes = {
-  buttonLabel: PropTypes.string.isRequired
+  buttonLabel: PropTypes.string.isRequired,
+  startValues: PropTypes.shape({
+    name: PropTypes.string,
+    email: PropTypes.string,
+    phone: PropTypes.string,
+    category_id: PropTypes.number
+  })
+}
+
+ContactForm.defaultProps = {
+  startValues: {
+    name: '',
+    email: '',
+    phone: '',
+    category_id: ''
+  }
 }
 
 export default ContactForm

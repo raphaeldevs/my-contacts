@@ -1,5 +1,4 @@
 import APIError from '../../errors/APIError'
-import delay from '../../utils/delay'
 
 class HttpClient {
   constructor(baseURL) {
@@ -7,8 +6,6 @@ class HttpClient {
   }
 
   async get(path) {
-    await delay(3000)
-
     const response = await fetch(`${this.baseURL}${path}`)
 
     const contentType = response.headers.get('content-type')
@@ -27,8 +24,6 @@ class HttpClient {
   }
 
   async post(path, body) {
-    await delay(3000)
-
     const response = await fetch(`${this.baseURL}${path}`, {
       method: 'POST',
       headers: {
@@ -50,6 +45,16 @@ class HttpClient {
     throw new APIError(
       responseBody?.error || `${response.status} - ${response.statusText}`
     )
+  }
+
+  async delete(path) {
+    const response = await fetch(`${this.baseURL}${path}`, {
+      method: 'DELETE'
+    })
+
+    if (response.ok) return
+
+    throw new APIError(`${response.status} - ${response.statusText}`)
   }
 }
 
