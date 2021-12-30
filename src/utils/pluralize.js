@@ -1,4 +1,4 @@
-function usePluralize({
+function pluralize({
   count = 0,
   singularText = '',
   pluralText = '',
@@ -10,4 +10,4 @@ function usePluralize({
   return `${count} ${pluralText}`
 }
 
-export default usePluralize
+export default pluralize
